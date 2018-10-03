@@ -45,8 +45,6 @@ end
 
 # Operator abstract class for defining operation tokens
 class Operator < Token
-  InvalidOperandError = Class.new(StandardError)
-
   attr_accessor :left, :right
 
   def precedence
