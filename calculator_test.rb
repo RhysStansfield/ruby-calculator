@@ -100,4 +100,11 @@ class CalculatorTest < Minitest::Test
       Calculator.calculate('43-(1.234*(4+3)/3)')
     )
   end
+
+  def test_extra_spaces
+    assert_equal(
+      Calculator.calculate('43 - (1.234 * (4 + 3) / 3)'),
+      Calculator.calculate('43-    ( 1.234   *  (4    +3) /     3     )  ')
+    )
+  end
 end
