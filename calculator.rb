@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @author Rhys Stansfield <rhys.stansfield@protonmail.com>
 
 # Abstract token class for representing all token varieties
@@ -25,13 +27,19 @@ end
 
 # Numeric token class for holding numeric values
 class NumericToken < Token
+  IGNORES = %w[_ ,].freeze
+
   def value
     val = Float(super.chomp('.'))
     (val % 1.0).zero? ? val.to_i : val
   end
 
+  def <<(char)
+    chars << char unless IGNORES.any? { |ignored| ignored == char }
+  end
+
   def accepts?(char)
-    char =~ /\d|\./
+    char =~ /\d|\.|_|,/
   end
 end
 
@@ -76,7 +84,7 @@ class Calculator
   ParenNotOpenedError = Class.new(StandardError)
 
   def self.calculate(input)
-    reduce(tokenize(input.gsub(/\s|_|,/, '').split(''))).value
+    reduce(tokenize(input.split(''))).value
   end
 
   def self.reduce(element)
