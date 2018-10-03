@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+require_relative 'calculator.rb'
+
+ARGV.each do |calculation_str|
+  puts "#{calculation_str} = #{Calculator.calculate(calculation_str)}"
+end
