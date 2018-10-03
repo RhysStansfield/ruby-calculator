@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'minitest/autorun'
 
 require_relative 'calculator.rb'
@@ -91,6 +93,20 @@ class CalculatorTest < Minitest::Test
     assert_equal(
       40.120666666666665,
       Calculator.calculate('43 - (1.234 * (4 + 3) / 3)')
+    )
+
+    assert_equal(
+      505,
+      Calculator.calculate('2 * 3 ** 4 + (4 + 6 / (1 + 1)) ** 3')
+    )
+  end
+
+  def test_evaulates_the_same_as_ruby
+    assert_equal(
+      2 * 3**4 + ((4 + 6 / (1 + 1))**3) - ((((2 + 2) * 3) - 4)**2),
+      Calculator.calculate(
+        '2 * 3 ** 4 + ((4 + 6 / (1 + 1)) ** 3) - ((((2 + 2) * 3) - 4) ** 2)'
+      ) # 441
     )
   end
 

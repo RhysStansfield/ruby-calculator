@@ -85,6 +85,10 @@ class Calculator
     reduce(tokenize(input.split(''))).value
   end
 
+  # rubocop:disable Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Style/MethodLength
   def self.reduce(element)
     return element unless element.is_a?(Array)
 
@@ -97,19 +101,19 @@ class Calculator
                        .flat_map(&:last)
 
     while (operator = operators.shift)
-      next if operator.left && operator.right
       next_operator = values[values.index(operator) + 1..-1].find do |el|
         el.is_a?(Operator)
       end
 
-      if operator.left.nil?
-        operator.left = values.delete_at(values.index(operator) - 1)
-      end
+      operator.left = values.delete_at(values.index(operator) - 1)
 
       if next_operator.nil? || (operator.precedence >= next_operator.precedence)
         operator.right = values.delete_at(values.index(operator) + 1)
       else
         operator.right = next_operator
+        if next_operator.left && next_operator.right
+          values.delete(next_operator)
+        end
       end
     end
 
