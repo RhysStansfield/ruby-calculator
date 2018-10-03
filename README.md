@@ -1,24 +1,39 @@
-# Calculator Test
+# Calculator Hammer
 
-Build a simple command line calculator, it should be able to receive input as a string as input to the script being run and return the calculated value.
+Attempt to recreate Ruby maths parsing equivalent (Integer and Float only, currently no support for exponetials or other notations), written in pure stdlib Ruby.
 
-To start with we should aim to handle just two operands of positive ints only (don't worry about negative numbers for now) on either side of an operator (+, -, /, \*, \*\*..)
+Correctly handles arbitrary spacing, parenthesis, and precedence.
 
-e.g.
+## Usage
+
 ```
-$ calculator.rb "2 + 5" # => 7
-$ calculator.rb "243 - 43" # => 200
-$ calculator.rb "3 ** 5" # => 243
-$ calculator.rb "243 / 3" # => 81
+$: ./calculator "43-1.234*((4+3))/(((3)))"
+43-1.234*((4+3))/(((3))) = 40.120666666666665
 ```
 
-Next lets aim to handle multiple chained operations, with correct precedence handling (BODMAS).
+You can also evaluate multiple expressions in one go:
 
-Don't worry about handling brackets for now.
-
-e.g.
 ```
-$ calculator.rb "2 + 2 - 2" # => 2
-$ calculator.rb "2 + 2 * 4" # => 10
-$ calculator.rb "20 ** 4 / 8" # => 20000
+$: ./calculator "2 + 2" "2 * 4" "3 * 5 + 8 ** 9"
+2 + 2 = 4
+2 * 4 = 8
+3 * 5 + 8 ** 9 = 134217743
+```
+
+## Test
+
+Tests written in `minitest`
+
+Just run with plain ol' Ruby:
+
+```
+$: ruby ./calculator_test.rb
+Run options: --seed 21534
+
+# Running:
+
+.............
+
+Finished in 0.003837s, 3388.0636 runs/s, 9903.5705 assertions/s.
+13 runs, 38 assertions, 0 failures, 0 errors, 0 skips
 ```
