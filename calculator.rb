@@ -94,7 +94,7 @@ class Calculator
     operators = element.select { |el| el.is_a?(Operator) }
                        .group_by(&:precedence)
                        .to_a
-                       .sort_by { |(prec, _)| prec }
+                       .sort_by(&:first)
                        .reverse
                        .flat_map(&:last)
 
