@@ -88,9 +88,16 @@ class CalculatorTest < Minitest::Test
   end
 
   def test_getting_silly
-    assert(
+    assert_equal(
       40.120666666666665,
       Calculator.calculate('43 - (1.234 * (4 + 3) / 3)')
+    )
+  end
+
+  def test_no_spaces
+    assert_equal(
+      Calculator.calculate('43 - (1.234 * (4 + 3) / 3)'),
+      Calculator.calculate('43-(1.234*(4+3)/3)')
     )
   end
 end

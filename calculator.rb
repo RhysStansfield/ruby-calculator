@@ -85,25 +85,32 @@ class Calculator
   def self.reduce(element)
     return element unless element.is_a?(Array)
 
-    until element.empty?
-      operator = element.find do |el|
-        el.is_a?(Operator) && el.right.nil?
-      end
+    values = element.map { |el| reduce(el) }
+    operators = element.select { |el| el.is_a?(Operator) }
+                       .group_by(&:precedence)
+                       .to_a
+                       .sort_by { |(prec, _)| prec }
+                       .reverse
+                       .flat_map(&:last)
 
-      return reduce(element.shift) if operator.nil?
-
-      next_operator = element[element.index(operator) + 1..-1].find do |el|
+    while (operator = operators.shift)
+      next if operator.left && operator.right
+      next_operator = values[values.index(operator) + 1..-1].find do |el|
         el.is_a?(Operator)
       end
 
-      operator.left = reduce(element.delete_at(element.index(operator) - 1))
+      if operator.left.nil?
+        operator.left = values.delete_at(values.index(operator) - 1)
+      end
 
       if next_operator.nil? || (operator.precedence >= next_operator.precedence)
-        operator.right = reduce(element.delete_at(element.index(operator) + 1))
+        operator.right = values.delete_at(values.index(operator) + 1)
       else
         operator.right = next_operator
       end
     end
+
+    values.shift
   end
 
   def self.tokenize(input, level = 0)
