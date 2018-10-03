@@ -53,7 +53,7 @@ class Operator < Token
     case operation
     when '+', '-' then 0
     when '*', '/' then 1
-    when /\*{2}/ then 2
+    when '**' then 2
     end
   end
 
