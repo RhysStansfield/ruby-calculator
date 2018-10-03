@@ -58,9 +58,6 @@ class Operator < Token
   end
 end
 
-OpenParen = Class.new(Operator)
-CloseParen = Class.new(Operator)
-
 Plus = Class.new(Operator)
 Minus = Class.new(Operator)
 Times = Class.new(Operator)
