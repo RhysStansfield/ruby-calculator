@@ -105,7 +105,13 @@ class Calculator
         el.is_a?(Operator)
       end
 
-      operator.left = values.delete_at(values.index(operator) - 1)
+      left_index = values.index(operator) - 1
+      if left_index < 0 && operator.is_a?(Minus)
+         # handle case of opening '-' operator, e.g. -2*2
+        operator.left = NumericToken.new("0")
+      else
+        operator.left = values.delete_at(left_index)
+      end
 
       if next_operator.nil? || (operator.precedence >= next_operator.precedence)
         operator.right = values.delete_at(values.index(operator) + 1)
@@ -127,20 +133,7 @@ class Calculator
       element = \
         case char
         when /\d/ then NumericToken.new(char)
-        when '+' then Plus.new(char)
-        when '-'
-          if tree.empty? || tree.last.is_a?(Operator)
-            NumericToken.new(char) # handle negatives
-          else
-            Minus.new(char)
-          end
-        when '*'
-          if input.first == '*'
-            Order.new(char)
-          else
-            Times.new(char)
-          end
-        when '/' then Divide.new(char)
+        when '+', '-', '*', '/' then create_operator_token(input, char, tree)
         when '('
           tokenize(input, level + 1)
         when ')' then
@@ -165,5 +158,32 @@ class Calculator
     end
 
     tree
+  end
+
+  def self.create_operator_token(input, char, tree)
+    validate_permitted_operator!(char, tree)
+
+    case char
+    when '+' then Plus.new(char)
+    when '-'
+      if tree.last.is_a?(Operator)
+        NumericToken.new(char) # handle negatives
+      else
+        Minus.new(char)
+      end
+    when '*'
+      if input.first == '*'
+        Order.new(char)
+      else
+        Times.new(char)
+      end
+    when '/' then Divide.new(char)
+    end
+  end
+
+  def self.validate_permitted_operator!(char, tree)
+    if tree.empty? && char != '-'
+      raise ParseError, "Unpermitted opening operator: #{char}"
+    end
   end
 end

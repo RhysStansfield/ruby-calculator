@@ -44,14 +44,14 @@ class CalculatorTest < Minitest::Test
     assert_equal(-4, Calculator.calculate('2 * -2'))
     assert_equal 6, Calculator.calculate('0 + (4 - -2)')
     assert_equal(-12, Calculator.calculate('-24 / (4 - 2)'))
-
-    # note this next test seems to be a bug in Ruby related to .send
-    #
-    # irb(main):003:0> -2.send(:**, 2)
-    # => 4
-    # irb(main):004:0> -2 ** 2
-    # => -4
-    assert_equal 4, Calculator.calculate('-2 ** 2')
+    assert_equal(-4, Calculator.calculate('-2 ** 2'))
+    assert_equal(-9, Calculator.calculate('-3 * 3'))
+    assert_equal(-27, Calculator.calculate('-3 ** 3'))
+    assert_equal(0, Calculator.calculate('-3 + 3'))
+    assert_equal(-4, Calculator.calculate('-2 - 2'))
+    assert_equal(0, Calculator.calculate('-(2 - 2)'))
+    assert_equal(6, Calculator.calculate('-3 + 3 * 3'))
+    assert_equal(-12, Calculator.calculate('-(3 + 3 * 3)'))
   end
 
   def test_float_calculations
